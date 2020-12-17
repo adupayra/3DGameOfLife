@@ -148,13 +148,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Documents\Informatique\perso\glad\src\glad.c" />
-    <ClCompile Include="CubeClass.cpp" />
-    <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="testopenglencore.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CubeClass.h" />
+    <ClInclude Include="GameManager.h" />
+    <ClInclude Include="Grid.h" />
+    <ClInclude Include="RenderClass.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="testopenglencore.h" />

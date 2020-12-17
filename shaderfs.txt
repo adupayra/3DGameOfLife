@@ -1,14 +1,8 @@
 #version 330 core
 out vec4 FragColor;
 
-in vec3 ourColor;
-in vec2 texCoord;
-
-uniform sampler2D shaderTexture;
-uniform sampler2D shaderTexture2;
-uniform float step;
 
 void main()
 {
-   FragColor = mix(texture(shaderTexture, texCoord),texture(shaderTexture2, texCoord), step);
+   FragColor = vec4(1.0,0.0,0.0,1.0);
 }

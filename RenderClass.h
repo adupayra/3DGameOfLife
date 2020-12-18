@@ -78,13 +78,6 @@ public:
 		return ourShader;
 	}
 
-	void updateShader()
-	{
-		ourShader.setMatrix("model", model);
-		ourShader.setMatrix("view", view);
-		ourShader.setMatrix("perspective", perspective);
-	}
-
 	GLFWwindow* getWindow()
 	{
 		return window;
@@ -123,7 +116,7 @@ public:
 
 	glm::mat4 model = glm::mat4(1.0f);
 	glm::mat4 view = glm::mat4(1.0f);
-	glm::mat4 perspective = glm::mat4(1.0f);
+	glm::mat4 projection = glm::mat4(1.0f);
 
 private:
 
@@ -145,13 +138,15 @@ private:
 	{
 		initContext();
 		initShaders();
-		//initTextures();
+		initTextures();
 		initMemory();
 		glEnable(GL_DEPTH_TEST);
 		glActiveTexture(GL_TEXTURE0);
 		ourShader.use();
 		ourShader.setInt("shaderTexture", 0);
 		glActiveTexture(GL_TEXTURE0);
+		projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+		ourShader.setMatrix("projection", projection);
 	}
 
 	void render();
@@ -203,14 +198,14 @@ private:
 
 
 		// position attribute
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
 		glEnableVertexAttribArray(0);
 		// color attribute
 		/*glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
 		glEnableVertexAttribArray(1);*/
 		// texture coord attribute
-		/*glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-		glEnableVertexAttribArray(2);*/
+		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+		glEnableVertexAttribArray(1);
 	}
 
 	void initContext()

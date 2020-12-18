@@ -132,7 +132,7 @@ public:
 		glUniform1f(glGetUniformLocation(ID, name.c_str()), value);
 	}
 
-	void setMatrix(const std::string& name, glm::mat4 matrix) const
+	void setMatrix(const std::string& name, const glm::mat4 matrix) const
 	{
 		glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()),1, GL_FALSE, &matrix[0][0]);
 	}

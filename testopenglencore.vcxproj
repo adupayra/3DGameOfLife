@@ -152,7 +152,6 @@
     <ClCompile Include="testopenglencore.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CubeClass.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="Grid.h" />
     <ClInclude Include="RenderClass.h" />

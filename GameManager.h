@@ -48,17 +48,21 @@ public:
             
             
 
+
             // render
             // ------
+            
             glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
             
+            //View adjustement
             glm::mat4 view = glm::mat4(1.0f);
             view = glm::translate(view, glm::vec3(-offsetxy, -offsetxy, -5.0f));
-            view = glm::rotate(view, glm::radians(45.0f), glm::vec3(1.0f, 0, 0));
+            view = glm::rotate(view, glm::radians(45.0f), glm::vec3(1.0f, 1.0, 0));
             renderVar.getShader().setMatrix("view", view);
             
+            //Render the cells
             glm::mat4 model = glm::mat4(1.0f);
             for (int i = 0; i < SIZEOFWORLD; i++)
             {
@@ -83,6 +87,7 @@ public:
                 }
             }
 
+            //Update the grid
             gridVar.processGrid();
 
             // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
@@ -91,10 +96,9 @@ public:
             glfwPollEvents();
             
         }
-
-        // optional: de-allocate all resources once they've outlived their purpose:
-        // ------------------------------------------------------------------------
-
+        
+        // Deletion of the gl variables
+        renderVar.deleteBuffers();
         // glfw: terminate, clearing all previously allocated GLFW resources.
         // ------------------------------------------------------------------
         glfwTerminate();

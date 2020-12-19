@@ -21,9 +21,15 @@ public:
 
 	}
 
+	//Constructor which will create a program by creating and linking a vertex and a fragment shader (by using the files indicated as parameters to compile each shader)
 	Shader(const char* pathToVertex, const char* pathToFragment)
 	{
 
+		/*-------------------------------------------*/
+
+		//File opening and reading stuff
+
+		/*--------------------------------------------*/
 		std::string vertexCode;
 		std::string fragmentCode;
 
@@ -35,20 +41,21 @@ public:
 
 		try
 		{
+			//Open files
 			vShaderFile.open(pathToVertex);
 			fShaderFile.open(pathToFragment);
 
 			std::stringstream vShaderStream, fShaderStream;
 
+			//Read the files
 			vShaderStream << vShaderFile.rdbuf();
 			fShaderStream << fShaderFile.rdbuf();
 
 			vShaderFile.close();
 			fShaderFile.close();
 
+			//Convert files streams into usable type
 			vertexCode = vShaderStream.str();
-
-
 			fragmentCode = fShaderStream.str();
 		}
 		catch (std::ifstream::failure e)
@@ -56,21 +63,26 @@ public:
 			std::cout << "ERROR READING FILES" << std::endl;
 		}
 
+
+		/*----------------------------------------------------*/
+		
+		//Creation compilation, and error checking of the two shaders
+
+		/*----------------------------------------------------*/
 		int succes;
 		char log[512];
 
+		//Creation of the specific shaders
 		int vertexShaderID = glCreateShader(GL_VERTEX_SHADER);
 		int fragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
-
+		//Convert the strings into C string
 		const char* vShaderCode = vertexCode.c_str();
 		const char* fShaderCode = fragmentCode.c_str();
-
-
+		//Binding of the shader object with the compile string
 		glShaderSource(vertexShaderID, 1, &vShaderCode, NULL);
 		glShaderSource(fragmentShaderID, 1, &fShaderCode, NULL);
-
+		//Compile the shader and check for error
 		glCompileShader(vertexShaderID);
-
 		glGetShaderiv(vertexShaderID, GL_COMPILE_STATUS, &succes);
 
 		if (!succes)
@@ -89,6 +101,12 @@ public:
 			std::cout << "ERROR COMPILING FRAGMENT " << log << std::endl;
 		}
 
+
+		/*-----------------------------------*/
+
+		//Creation of the associated program and linking of the shaders
+
+		/*-----------------------------------*/
 		ID = glCreateProgram();
 
 		glAttachShader(ID, vertexShaderID);
@@ -103,6 +121,7 @@ public:
 			std::cout << "ERROR LINKING SHADERS" << std::endl;
 		}
 
+		//We can delete the shaders when the program is craeted and the links are made
 		glDeleteShader(vertexShaderID);
 		glDeleteShader(fragmentShaderID);
 	}
@@ -117,6 +136,8 @@ public:
 		return ID;
 	}
 
+	
+	//Shaders' uniform values setters
 	void setBool(const std::string& name, bool value) const
 	{
 		glUniform1i(glGetUniformLocation(ID, name.c_str()), (int)value);

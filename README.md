@@ -11,3 +11,5 @@ Obvious improvements could be to make some thread computation for the rendering 
 It could also be interesting to make more advanced post process effects.
 
 This was a good project to put my hands on C++ as well as on the basics of computer graphics.
+
+I might come back to it when i'll know more about thread management on the CPU side as well as on the GPU side (using CUDA for instance) and rendering.

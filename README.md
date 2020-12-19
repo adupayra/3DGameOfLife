@@ -1,7 +1,7 @@
 # 3DGameOfLife
 Basic game of life in 3D using openGL with GLSL
 
-#Introduction
+# Introduction
 
 Personal project made to learn  C++ and discover graphics computing.
 

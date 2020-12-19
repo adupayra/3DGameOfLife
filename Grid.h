@@ -15,14 +15,6 @@ public:
 		grid[0][0][0] = 1;
 		grid[0][1][0] = 1;
 		grid[0][2][0] = 1;
-		int i0 = (0 - 1 + SIZEOFWORLD) % SIZEOFWORLD;
-		int i2 = (0 + 1 + SIZEOFWORLD) % SIZEOFWORLD;
-		int j0 = (1 - 1 + SIZEOFWORLD) % SIZEOFWORLD;
-		int j2 = (1 + 1 + SIZEOFWORLD) % SIZEOFWORLD;
-		int z0 = (0 - 1 + SIZEOFWORLD) % SIZEOFWORLD;
-		int z2 = (0 + 1 + SIZEOFWORLD) % SIZEOFWORLD;
-		std::cout << i0 << i2 << j0 << j2 << z0 << z2 << std::endl;
-		//process()
 	}
 
 
@@ -53,12 +45,12 @@ public:
 
 	void process(int i0, int i, int i2, int j0, int j,  int j2, int z0, int z,  int z2)
 	{
-		int countCells = grid[i0][j0][z0] + grid[i][j0][z0] + grid[i2][j0][z0] + grid[i0][j][z0] + grid[i0][j2][z0] + grid[i][j][z0] +
-			grid[i][j2][z0] + grid[i2][j][z0] + grid[i2][j2][z0] +
-			grid[i0][j0][z] + grid[i][j0][z] + grid[i2][j0][z] + grid[i0][j][z] + grid[i0][j2][z] +
-			grid[i][j2][z] + grid[i2][j][z] + grid[i2][j2][z] +
-			grid[i0][j0][z2] + grid[i][j0][z2] + grid[i2][j0][z2] + grid[i0][j][z2] + grid[i0][j2][z2] + grid[i][j][z2] +
-			grid[i][j2][z2] + grid[i2][j][z2] + grid[i2][j2][z2];
+		int countCells = grid[i0][j0][z0] + grid[i][j0][z0] + grid[i2][j0][z0] + grid[i0][j][z0] + grid[i][j][z0] + grid[i2][j][z0] +
+			grid[i0][j2][z0] + grid[i][j2][z0] + grid[i2][j2][z0] +
+			grid[i0][j0][z] + grid[i][j0][z] + grid[i2][j0][z] + grid[i0][j][z] + grid[i2][j][z] +
+			grid[i0][j2][z] + grid[i][j2][z] + grid[i2][j2][z] +
+			grid[i0][j0][z2] + grid[i][j0][z2] + grid[i2][j0][z2] + grid[i0][j][z2] + grid[i][j][z2] + grid[i2][j][z2] +
+			grid[i0][j2][z2] + grid[i][j2][z2] + grid[i2][j2][z2];
 
 		
 		tempGrid[i][j][z] = countCells == 3 || (countCells == 2 && grid[i][j][z] == 1) ? 1 : 0;

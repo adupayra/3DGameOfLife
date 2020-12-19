@@ -41,12 +41,14 @@ public:
         //renderVar.getShader().setVec3("color", glm::vec3(1.0f, 1.0f, 1.0f));
         while (!glfwWindowShouldClose(renderVar.getWindow()))
         {
-            system("pause");
-            std::this_thread::sleep_for(std::chrono::seconds(2));
-            
+       
             // input
             // -----
             renderVar.processInput();
+
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
+            
+            
 
             // render
             // ------
@@ -56,7 +58,7 @@ public:
             
             glm::mat4 view = glm::mat4(1.0f);
             view = glm::translate(view, glm::vec3(-offsetxy, -offsetxy, -5.0f));
-            
+            view = glm::rotate(view, glm::radians(45.0f), glm::vec3(1.0f, 0, 0));
             renderVar.getShader().setMatrix("view", view);
             
             glm::mat4 model = glm::mat4(1.0f);
@@ -83,15 +85,7 @@ public:
             }
 
             gridVar.processGrid();
-            /*for (CubeClass c : gridVar.getGrid())
-            {
-                glm::mat4 model = glm::mat4(1.0f);
-                model = glm::translate(model, c.getPosition());
-                renderVar.getShader().setMatrix("model", model);
 
-                glDrawArrays(GL_TRIANGLES, 0, 36);
-            }*/
-       
             // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
             // -------------------------------------------------------------------------------
             glfwSwapBuffers(renderVar.getWindow());

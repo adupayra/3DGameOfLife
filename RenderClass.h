@@ -7,8 +7,11 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-
-
+#include <vector>
+#include "Grid.h"
+#include <iostream>
+#include <thread>
+#include <chrono>
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
@@ -17,48 +20,50 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 	glViewport(0, 0, width, height);
 }
 
-static const float vertices[] = {
-	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-	 0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
-	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+static float step = 1/(float)SIZEOFWORLD;
 
-	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-	 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-	 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-	-0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
-	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+static float vertices[] = {
+	-step, -step, -step,  0.0f, 0.0f,
+	 step, -step, -step,  1.0f, 0.0f,
+	 step,  step, -step,  1.0f, 1.0f,
+	 step,  step, -step,  1.0f, 1.0f,
+	-step,  step, -step,  0.0f, 1.0f,
+	-step, -step, -step,  0.0f, 0.0f,
 
-	-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-	-0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-	-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+	-step, -step,  step,  0.0f, 0.0f,
+	 step, -step,  step,  1.0f, 0.0f,
+	 step,  step,  step,  1.0f, 1.0f,
+	 step,  step,  step,  1.0f, 1.0f,
+	-step,  step,  step,  0.0f, 1.0f,
+	-step, -step,  step,  0.0f, 0.0f,
 
-	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-	 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-	 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-	 0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+	-step,  step,  step,  1.0f, 0.0f,
+	-step,  step, -step,  1.0f, 1.0f,
+	-step, -step, -step,  0.0f, 1.0f,
+	-step, -step, -step,  0.0f, 1.0f,
+	-step, -step,  step,  0.0f, 0.0f,
+	-step,  step,  step,  1.0f, 0.0f,
 
-	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-	 0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
-	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+	 step,  step,  step,  1.0f, 0.0f,
+	 step,  step, -step,  1.0f, 1.0f,
+	 step, -step, -step,  0.0f, 1.0f,
+	 step, -step, -step,  0.0f, 1.0f,
+	 step, -step,  step,  0.0f, 0.0f,
+	 step,  step,  step,  1.0f, 0.0f,
 
-	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-	-0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
-	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f
+	-step, -step, -step,  0.0f, 1.0f,
+	 step, -step, -step,  1.0f, 1.0f,
+	 step, -step,  step,  1.0f, 0.0f,
+	 step, -step,  step,  1.0f, 0.0f,
+	-step, -step,  step,  0.0f, 0.0f,
+	-step, -step, -step,  0.0f, 1.0f,
+
+	-step,  step, -step,  0.0f, 1.0f,
+	 step,  step, -step,  1.0f, 1.0f,
+	 step,  step,  step,  1.0f, 0.0f,
+	 step,  step,  step,  1.0f, 0.0f,
+	-step,  step,  step,  0.0f, 0.0f,
+	-step,  step, -step,  0.0f, 1.0f
 
 
 };
@@ -70,7 +75,31 @@ public:
 
 	RenderClass()
 	{
-		init();
+		
+	}
+
+
+	void init()
+	{
+		initRenderGrid();
+		initContext();
+		initShaders();
+		initTextures();
+		initMemory();
+		glEnable(GL_DEPTH_TEST);
+		glActiveTexture(GL_TEXTURE0);
+		ourShader.use();
+		ourShader.setInt("shaderTexture", 0);
+		glActiveTexture(GL_TEXTURE0);
+		projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+		ourShader.setMatrix("projection", projection);
+	}
+
+	glm::vec3 renderGrid[SIZEOFWORLD][SIZEOFWORLD][SIZEOFWORLD];
+
+	float getCubeSize()
+	{
+		return step * 2;
 	}
 
 	Shader getShader()
@@ -94,18 +123,8 @@ public:
 		if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 			glfwSetWindowShouldClose(window, true);
 
-		if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
+		if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
 		{
-			mixValue += 0.001f;
-			if (mixValue > 1.0f)
-				mixValue = 1.0f;
-		}
-
-		if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
-		{
-			mixValue -= 0.001f;
-			if (mixValue < 0.0f)
-				mixValue = 0.0f;
 		}
 	}
 
@@ -134,22 +153,26 @@ private:
 	unsigned int VAO, VBO;
 	unsigned int texture;
 
-	void init()
-	{
-		initContext();
-		initShaders();
-		initTextures();
-		initMemory();
-		glEnable(GL_DEPTH_TEST);
-		glActiveTexture(GL_TEXTURE0);
-		ourShader.use();
-		ourShader.setInt("shaderTexture", 0);
-		glActiveTexture(GL_TEXTURE0);
-		projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-		ourShader.setMatrix("projection", projection);
-	}
 
-	void render();
+	void initRenderGrid()
+	{
+		float cubeSize = getCubeSize();
+
+		for (int i = 0; i < SIZEOFWORLD; i++)
+		{
+			float offsetx = i * cubeSize;
+			for (int j = 0; j < SIZEOFWORLD; j++)
+			{
+				float offsetj = j * cubeSize;
+				for (int z = 0; z < SIZEOFWORLD; z++)
+				{
+					float offsetz = -z * cubeSize;
+					renderGrid[i][j][z] = glm::vec3(offsetx, offsetj, offsetz);
+				}
+
+			}
+		}
+	}
 
 	void initTextures()
 	{
@@ -166,11 +189,11 @@ private:
 		int width, height, nrChannels;
 		// The FileSystem::getPath(...) is part of the GitHub repository so we can find files on any IDE/platform; replace it with your own image path.
 		stbi_set_flip_vertically_on_load(true);
-		unsigned char* data = stbi_load("container.jpg", &width, &height, &nrChannels, 0);
+		unsigned char* data = stbi_load("awesomeface.png", &width, &height, &nrChannels, 0);
 
 		if (data)
 		{
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
 			glGenerateMipmap(GL_TEXTURE_2D);
 		}
 		else
@@ -200,9 +223,7 @@ private:
 		// position attribute
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
 		glEnableVertexAttribArray(0);
-		// color attribute
-		/*glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-		glEnableVertexAttribArray(1);*/
+
 		// texture coord attribute
 		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
 		glEnableVertexAttribArray(1);

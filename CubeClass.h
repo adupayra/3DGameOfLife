@@ -9,18 +9,22 @@ class CubeClass
 {
 public:
 	
+	CubeClass(){}
 
-    CubeClass(float offsetx, float offsety, float offsetz)
-    {
-        position = glm::vec3(offsetx, offsety, offsetz);
-    }
 
-	glm::vec3 getPosition() const;
+	
+	void process()
+	{
 
+	}
+
+	void apply()
+	{
+
+	}
 private:
 
 	unsigned int status = 0;
-
-	glm::vec3 position;
+	unsigned int buffer;
 };
 

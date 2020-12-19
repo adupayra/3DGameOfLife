@@ -4,7 +4,7 @@ int main()
 {
     GameManager test = GameManager();
     test.init();
-    test.gameLoop();
+    //test.gameLoop();
     
 }
 

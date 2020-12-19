@@ -7,6 +7,7 @@
 #include <thread>
 #include <chrono>
 
+
 class GameManager
 {
 public:
@@ -21,8 +22,6 @@ public:
 	void init()
 	{
         renderVar.init();
-        float cubeSize = renderVar.getCubeSize();
-        gridVar = Grid();
         
         
 	}
@@ -34,19 +33,18 @@ public:
         float offsetxy = ((float)SIZEOFWORLD * cubeSize)/2 - cubeSize / 2;
         //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-        glm::vec3 aliveColor = glm::vec3(0.0f, 1.0f, 0.0f);
+        glm::vec3 gonnaLiveColor = glm::vec3(0.0f, 1.0f, 0.0f);
         glm::vec3 gonnaDieColor = glm::vec3(1.0f, 0.0f, 0.0f);
-        glm::vec3 gonnaLiveColor = glm::vec3(0.0f, 0.0f, 1.0f);
-        
+        glm::vec3 aliveColor = glm::vec3(0.0f, 0.0f, 1.0f);
+        glm::vec3 colors[] = { aliveColor, gonnaLiveColor, gonnaDieColor };
         //renderVar.getShader().setVec3("color", glm::vec3(1.0f, 1.0f, 1.0f));
         while (!glfwWindowShouldClose(renderVar.getWindow()))
         {
-       
             // input
             // -----
             renderVar.processInput();
 
-            std::this_thread::sleep_for(std::chrono::milliseconds(100));
+            std::this_thread::sleep_for(std::chrono::milliseconds(timeStep));
             
             
 
@@ -69,12 +67,13 @@ public:
                     
                     for (int z = 0; z < SIZEOFWORLD; z++)
                     {
-                        if (gridVar.grid[i][j][z] == 1)
+                        unsigned int cache = gridVar.grid[i][j][z];
+                        if (cache != (unsigned int)State::Dead)
                         {
                             model = glm::mat4(1.0f);
                             model = glm::translate(model, renderVar.renderGrid[i][j][z]);
                             renderVar.getShader().setMatrix("model", model);
-                            renderVar.getShader().setVec3("color", aliveColor);
+                            renderVar.getShader().setVec3("color", colors[cache - 1]);
                             glDrawArrays(GL_TRIANGLES, 0, 36);
                         }
 
@@ -103,7 +102,7 @@ public:
 
 private:
 
-	
+    const int timeStep = 500;
 
 	
 

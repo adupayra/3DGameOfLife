@@ -3,7 +3,7 @@ Basic game of life in 3D using openGL with GLSL
 
 # Introduction
 
-Personal project made to learn  C++ and discover graphics computing.
+Personal project made to learn  C++ and discover graphics computing. It was made in a few days, longest was to learn openGL and basics of computer graphics.
 
 The project is kind of minimal, it doesn't contain features and wasn't aimed to be perfect in term of speed or use of resources. 
 
@@ -12,4 +12,4 @@ It could also be interesting to make more advanced post process effects.
 
 This was a good project to put my hands on C++ as well as on the basics of computer graphics.
 
-I might come back to it when i'll know more about thread management on the CPU side as well as on the GPU side (using CUDA for instance) and rendering.
+I might come back to it when i'll know more about thread management on the CPU side as well as on the GPU side (using CUDA for instance) and more about rendering.

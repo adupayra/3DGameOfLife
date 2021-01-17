@@ -3,7 +3,7 @@
 #include <vector>
 #include <cstdlib>
 
-const int SIZEOFWORLD = 30;
+const int SIZEOFWORLD = 35;
 
 //Possible states of a cell
 enum class State {Alive = 1, Dead = 0, GonnaLive = 2, GonnaDie = 3};

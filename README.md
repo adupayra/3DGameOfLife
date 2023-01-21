@@ -1,4 +1,4 @@
-# 3DGameOfLife
+# 3DGameOfLife (2 days of development in November 2020)
 Basic game of life in 3D using openGL (with GLFW)
 
 # Introduction
